@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>台股國際新聞通知－我的私人頻道</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef2f6; --surface: #ffffff; --ink: #1b2a41; --muted: #5b6b80; --line: #d3dbe5;
+  --tw-red: #c8102e; --night: #1f3b63; --amber: #d98e1f; --jade: #0f7b5f; --focus: #2f6fdb;
+  --btn-ink: #ffffff;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101826; --surface: #172235; --ink: #e6ecf4; --muted: #9aa9bd; --line: #2b3a52;
+    --tw-red: #ef4a5f; --night: #7fa7e0; --amber: #f0b04a; --jade: #3cc39a; --focus: #7fa7e0; --btn-ink: #101826;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101826; --surface: #172235; --ink: #e6ecf4; --muted: #9aa9bd; --line: #2b3a52;
+  --tw-red: #ef4a5f; --night: #7fa7e0; --amber: #f0b04a; --jade: #3cc39a; --focus: #7fa7e0; --btn-ink: #101826;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 16px/1.65 "IBM Plex Sans", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+}
+main { max-width: 640px; margin: 0 auto; padding: 28px 18px 56px; }
+h1, h2 { font-family: "IBM Plex Sans Condensed", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif; font-weight: 700; line-height: 1.25; margin: 0; }
+h1 { font-size: clamp(1.9rem, 7.5vw, 2.7rem); letter-spacing: 0.01em; }
+h2 { font-size: 1.35rem; }
+p { margin: 0.5em 0; }
+.lede { color: var(--muted); max-width: 34em; margin-top: 12px; }
+
+/* hero: the overnight gap, Taipei time */
+.clock { margin: 26px 0 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 14px 12px; }
+.lane { display: grid; grid-template-columns: 64px 1fr; align-items: center; gap: 8px; margin: 7px 0; font-size: 0.85rem; }
+.lane span { color: var(--muted); }
+.track { position: relative; height: 16px; background: var(--bg); border-radius: 8px; overflow: hidden; }
+.bar { position: absolute; top: 0; bottom: 0; border-radius: 8px; }
+.ticks { display: grid; grid-template-columns: 64px 1fr; gap: 8px; font-size: 0.75rem; color: var(--muted); }
+.ticks div { display: flex; justify-content: space-between; }
+.clock-note { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+
+ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 30px 0 0; }
+ol.steps > li { counter-increment: step; position: relative; padding: 0 0 30px 46px; border-left: 2px solid var(--line); margin-left: 15px; }
+ol.steps > li:last-child { border-left-color: transparent; }
+ol.steps > li::before {
+  content: counter(step); position: absolute; left: -16px; top: -2px; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--night); color: var(--btn-ink); display: grid; place-items: center;
+  font: 700 0.95rem "IBM Plex Sans Condensed", system-ui, sans-serif;
+}
+ol.steps > li.done::before { content: "✓"; background: var(--jade); }
+.hint { color: var(--muted); font-size: 0.9rem; }
+
+label { display: block; font-weight: 600; margin: 12px 0 6px; }
+input[type="text"] {
+  width: 100%; font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px;
+}
+input[type="text"]:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 28px; }
+.chip { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 0.85rem; }
+.chip.bad { border-color: var(--tw-red); color: var(--tw-red); text-decoration: line-through; }
+
+.row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px;
+  font: 600 1rem "IBM Plex Sans", system-ui, sans-serif; text-decoration: none; cursor: pointer;
+  border-radius: 10px; padding: 10px 16px; border: 1px solid var(--night); background: var(--night); color: var(--btn-ink);
+}
+.btn.ghost { background: transparent; color: var(--night); }
+.btn.big { width: 100%; font-size: 1.05rem; min-height: 52px; }
+.btn[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+
+.topic {
+  margin-top: 10px; background: var(--surface); border: 1px dashed var(--night); border-radius: 12px; padding: 14px;
+  display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center;
+}
+.topic code { font: 600 1.05rem/1.3 "IBM Plex Sans", system-ui, sans-serif; word-break: break-all; }
+#qr { background: #fff; padding: 6px; border-radius: 8px; line-height: 0; }
+#qr img, #qr canvas { width: 104px !important; height: 104px !important; }
+
+details { margin-top: 12px; }
+summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; }
+textarea {
+  width: 100%; height: 180px; margin-top: 8px; font: 0.75rem/1.4 ui-monospace, Menlo, Consolas, monospace;
+  color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px;
+}
+.toast { min-height: 1.4em; font-size: 0.9rem; color: var(--jade); margin-top: 6px; }
+.warn { color: var(--tw-red); }
+footer { color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 16px; margin-top: 8px; }
+@media (max-width: 420px) { .topic { grid-template-columns: 1fr; } #qr { justify-self: start; } }
+@media (prefers-reduced-motion: no-preference) { .bar { animation: grow 900ms ease-out both; transform-origin: left; } }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.topicbig { font-size: 1.05rem; word-break: break-all; padding: 6px 10px; display: inline-block; }
+section { margin-top: 22px; }
+a.btn[aria-disabled="true"] { opacity: 0.45; pointer-events: auto; }
+details { margin-top: 26px; }
+summary { cursor: pointer; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>開通我的台股私人頻道</h1>
+    <p>除了大盤分析，還會分析<b>你自己的持股</b>。你的持股會先在手機上加密才送出，其他家人看不到。</p>
+  </header>
+
+  <section id="join">
+    <label for="name">你的名字</label>
+    <input id="name" type="text" autocomplete="off" placeholder="例如 媽媽">
+    <label for="hold">你的持股（名稱或代號都可以）</label>
+    <input id="hold" type="text" autocomplete="off" placeholder="例如 中華電 台積電 0056">
+    <div class="chips" id="chips" aria-live="polite"></div>
+    <p class="hint warn" id="warn" hidden></p>
+    <div class="row"><a class="btn big" id="go" href="#" target="_blank" rel="noopener" aria-disabled="true">開通我的私人頻道</a></div>
+    <p class="hint" id="goHint">輸入名字和持股後，按鈕就能按。按下去會打開一個網頁，看到一串英文就是成功了，關掉回到這裡。</p>
+  </section>
+
+  <section id="next" hidden>
+    <h2>最後一步：在 ntfy 訂閱你的頻道</h2>
+    <div id="android" hidden>
+      <p>按下面的按鈕，會直接打開 ntfy，再按 <b>Subscribe</b> 就完成了。</p>
+      <div class="row"><a class="btn big" id="oneTap" href="#">一鍵訂閱</a></div>
+      <p class="hint">沒有反應？請先安裝 ntfy，或用下面的「複製」方式。</p>
+    </div>
+    <p id="manual">打開 ntfy App → 按右上角 ＋ → 貼上下面的頻道名稱 → 按 Subscribe。</p>
+    <p><code id="topic" class="topicbig"></code></p>
+    <div class="row"><button class="btn big" type="button" id="copy">複製頻道名稱</button></div>
+    <p class="hint">大約 30 分鐘內會收到「✅ 你的私人頻道已開通」。這個名稱就是你的鑰匙，請截圖保存，不要給別人。之前訂閱過共用頻道 <code id="shared"></code> 的話，請刪掉它，不然會收到兩份。<br>
+      還沒裝 ntfy？<a id="store" href="https://apps.apple.com/app/ntfy/id1625396347" target="_blank" rel="noopener">按這裡下載</a></p>
+  </section>
+
+  <details id="later">
+    <summary>以後要改持股、改頻道名稱或停止</summary>
+    <label for="mine">你的頻道名稱（這支手機開通過的話會自動填好）</label>
+    <input id="mine" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="TWN-STOCK-INTL-NEWS-CENTER-……">
+    <p class="hint">要改持股：在上面「你的持股」改好，再按這裡的按鈕。新的持股會整個取代舊的。</p>
+    <div class="row">
+      <a class="btn" id="upd" href="#" target="_blank" rel="noopener" aria-disabled="true">送出新的持股</a>
+      <a class="btn ghost" id="stop" href="#" target="_blank" rel="noopener" aria-disabled="true">停止私人頻道</a>
+    </div>
+    <label for="newTopic">改頻道名稱：新的名稱（英文、數字、- 或 _，至少 8 個字）</label>
+    <input id="newTopic" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例如 TWN-STOCK-JS-7Q4K">
+    <p class="hint warn" id="newWarn" hidden></p>
+    <div class="row"><a class="btn" id="move" href="#" target="_blank" rel="noopener" aria-disabled="true">送出改名</a></div>
+    <p class="hint">送出後半小時內，新名稱會收到「✅ 私人頻道已改到這個名稱」。請在 ntfy 訂閱新名稱，再刪掉舊的。名稱越好猜，越容易被別人看到你的持股。</p>
+  </details>
+  <footer>半小時內生效。晚上 10 點到早上 7 點也會處理，確認訊息不會響。</footer>
+</main>
+<script>
+const PUBLIC_KEY = "BCIoLs_iI6qJw-mbtBHcbYkkrJEQqDCQeMN4irvqeKo3nCeyPoQ8YgS2fi-gnbRglfNLVcj98arj4YM-9KY0vlQ";
+const INBOX = "twna-inbox-ab6zpvmf7zjrj8yn3qv2";
+const SHARED_TOPIC = "TWN-STOCK-INTL-NEWS-CENTER";
+const CODE_RE = /^\d{4,6}[A-Z]?(\.TWO?)?$/;
+const TOPIC_RE = /^[A-Za-z0-9_-]{8,64}$/;
+const RESERVED = [INBOX, SHARED_TOPIC];
+const NAME_TO_CODE = {"台積電":"2330","聯電":"2303","日月光投控":"3711","日月光":"3711","聯發科":"2454","鴻海":"2317","廣達":"2382","緯創":"3231","緯穎":"6669","英業達":"2356","仁寶":"2324","和碩":"4938","技嘉":"2376","微星":"2377","華碩":"2357","宏碁":"2353","台達電":"2308","光寶科":"2301","奇鋐":"3017","雙鴻":"3324.TWO","川湖":"2059","健策":"3653","嘉澤":"3533","智邦":"2345","南亞科":"2408","華邦電":"2344","旺宏":"2337","力積電":"6770","群聯":"8299.TWO","世芯-KY":"3661","世芯":"3661","創意":"3443","智原":"3035","信驊":"5274.TWO","瑞昱":"2379","聯詠":"3034","環球晶":"6488.TWO","中美晶":"5483.TWO","世界先進":"5347.TWO","世界":"5347.TWO","穩懋":"3105.TWO","宏捷科":"8086.TWO","京元電子":"2449","京元電":"2449","力成":"6239","欣興":"3037","南電":"8046","景碩":"3189","臻鼎-KY":"4958","臻鼎":"4958","台光電":"2383","金像電":"2368","華通":"2313","國巨":"2327","大立光":"3008","研華":"2395","鴻準":"2354","元太":"8069.TWO","友達":"2409","群創":"3481","聯強":"2347","富邦金":"2881","國泰金":"2882","中信金":"2891","兆豐金":"2886","玉山金":"2884","元大金":"2885","第一金":"2892","華南金":"2880","合庫金":"5880","台新金":"2887","永豐金":"2890","開發金":"2883","凱基金":"2883","長榮":"2603","陽明":"2609","萬海":"2615","長榮航":"2618","華航":"2610","中鋼":"2002","台塑":"1301","南亞":"1303","台化":"1326","台塑化":"6505","台泥":"1101","亞泥":"1102","中華電":"2412","台灣大":"3045","遠傳":"4904","統一":"1216","統一超":"2912","富邦媒":"8454","和泰車":"2207","裕隆":"2201","寶成":"9904","儒鴻":"1476","聚陽":"1477","豐泰":"9910","上銀":"2049","華新":"1605","東元":"1504","士電":"1503","華城":"1519","中興電":"1513","亞力":"1514","元大台灣50":"0050","台灣50":"0050","0050":"0050","元大高股息":"0056","國泰永續高股息":"00878","群益台灣精選高息":"00919","元大台灣高息低波":"00713","富邦台50":"006208","復華台灣科技優息":"00929","元大台灣價值高息":"00940"};
+const enc = new TextEncoder();
+function b64urlToBytes(text) {
+  const b64 = text.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((text.length + 3) % 4);
+  return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+}
+function bytesToB64url(bytes) {
+  let s = ""; new Uint8Array(bytes).forEach(b => { s += String.fromCharCode(b); });
+  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+async function sealRequest(obj) {
+  // ECDH P-256 with an ephemeral key + HKDF-SHA256 + AES-GCM: only the notification system can open it.
+  const subtle = crypto.subtle;
+  const sysKey = await subtle.importKey("raw", b64urlToBytes(PUBLIC_KEY), { name: "ECDH", namedCurve: "P-256" }, false, []);
+  const eph = await subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
+  const shared = await subtle.deriveBits({ name: "ECDH", public: sysKey }, eph.privateKey, 256);
+  const hk = await subtle.importKey("raw", shared, "HKDF", false, ["deriveKey"]);
+  const aes = await subtle.deriveKey({ name: "HKDF", hash: "SHA-256", salt: enc.encode("twna-salt-v1"), info: enc.encode("twna-join-v1") },
+                                     hk, { name: "AES-GCM", length: 256 }, false, ["encrypt"]);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await subtle.encrypt({ name: "AES-GCM", iv }, aes, enc.encode(JSON.stringify(obj)));
+  const ephRaw = await subtle.exportKey("raw", eph.publicKey);
+  return "TWNA1." + bytesToB64url(ephRaw) + "." + bytesToB64url(iv) + "." + bytesToB64url(ct);
+}
+function inboxUrl(message) {
+  return "https://ntfy.sh/" + INBOX + "/publish?message=" + encodeURIComponent(message);
+}
+function inboxUrl(message) {
+  return "https://ntfy.sh/" + INBOX + "/publish?message=" + encodeURIComponent(message);
+}
+function makeTopic() {
+  // Same prefix as the shared channel so family recognise it; 10 random characters keep it unguessable.
+  const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";   // no 0/O, 1/I/L look-alikes
+  const bytes = crypto.getRandomValues(new Uint32Array(10));
+  return SHARED_TOPIC + "-" + Array.from(bytes, b => alphabet[b % alphabet.length]).join("");
+}
+function resolveToken(token) {
+  const ascii = token.replace(/[０-９．]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0)).toUpperCase();
+  if (CODE_RE.test(ascii)) return { code: ascii, label: ascii };
+  const key = token.replace(/\s+/g, "");
+  const code = NAME_TO_CODE[key] || NAME_TO_CODE[key.replace(/-?KY$/i, "")];
+  return code ? { code, label: key + " " + code.replace(".TWO", "") } : null;
+}
+function parseList(inputEl, chipsEl, warnEl) {
+  const raw = inputEl.value.split(/[\s,，、;；]+/).filter(Boolean);
+  const resolved = raw.map(tok => ({ tok, hit: resolveToken(tok) }));
+  chipsEl.replaceChildren(...resolved.map(({ tok, hit }) => {
+    const el = document.createElement("span");
+    el.className = "chip" + (hit ? "" : " bad");
+    el.textContent = hit ? hit.label : tok;
+    return el;
+  }));
+  const unknown = resolved.filter(r => !r.hit).map(r => r.tok);
+  warnEl.hidden = unknown.length === 0;
+  warnEl.textContent = unknown.length ? "找不到「" + unknown.join("、") + "」，請改輸入股票代號（上櫃股票加 .TWO）。" : "";
+  return [...new Set(resolved.filter(r => r.hit).map(r => r.hit.code))].slice(0, 20);
+}
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch (e) { /* fall back below */ }
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+  ta.remove();
+  return ok;
+}
+const store = {
+  get(k) { try { return localStorage.getItem("twna-fam:" + k) || ""; } catch (e) { return ""; } },
+  set(k, v) { try { localStorage.setItem("twna-fam:" + k, v); } catch (e) { /* storage unavailable */ } }
+};
+const $ = id => document.getElementById(id);
+$("shared").textContent = SHARED_TOPIC;
+const myTopic = store.get("topic") || makeTopic();  // the same phone keeps the same channel
+$("name").value = store.get("name");
+$("hold").value = store.get("hold");
+$("mine").value = store.get("topic");
+$("topic").textContent = myTopic;
+const isAndroid = /Android/i.test(navigator.userAgent);
+$("store").href = isAndroid ? "https://play.google.com/store/apps/details?id=io.heckel.ntfy"
+                            : "https://apps.apple.com/app/ntfy/id1625396347";
+if (isAndroid) {   // ntfy:// links open the Android app on the topic; iPhone does not support them
+  $("android").hidden = false;
+  $("manual").textContent = "或者：打開 ntfy App → 按右上角 ＋ → 貼上下面的頻道名稱 → 按 Subscribe。";
+  $("copy").classList.remove("big");
+}
+function oneTapLink() {
+  const name = $("name").value.trim() || "台股私人頻道";
+  return "ntfy://ntfy.sh/" + myTopic + "?display=" + encodeURIComponent(name + " 的台股私人頻道");
+}
+
+function setLink(el, url) {
+  el.href = url || "#";
+  el.setAttribute("aria-disabled", url ? "false" : "true");
+}
+let seq = 0;
+async function prepare() {
+  // Links are sealed ahead of time, so one tap sends (phones block windows opened after async work).
+  const mine = seq += 1;
+  const name = $("name").value.trim().slice(0, 20);
+  const codes = parseList($("hold"), $("chips"), $("warn"));
+  const ready = name && codes.length && window.crypto && crypto.subtle;
+  const ts = Math.floor(Date.now() / 1000);
+  const join = ready ? inboxUrl(await sealRequest({ a: "join", t: myTopic, n: name, h: codes, ts })) : "";
+  const existing = cleanTopic($("mine").value);
+  const valid = TOPIC_RE.test(existing);
+  const upd = valid && codes.length ? inboxUrl(await sealRequest({ a: "update", t: existing, n: name, h: codes, ts })) : "";
+  const stop = valid ? inboxUrl(await sealRequest({ a: "leave", t: existing, ts })) : "";
+  const target = $("newTopic").value.trim();
+  let moveProblem = "";
+  if (target && !TOPIC_RE.test(target)) moveProblem = "新名稱只能用英文、數字、- 或 _，至少 8 個字。";
+  else if (target && RESERVED.includes(target)) moveProblem = "這是共用頻道的名稱，不能當私人頻道。";
+  else if (target && target === existing) moveProblem = "新名稱和舊名稱一樣。";
+  const move = valid && target && !moveProblem ? inboxUrl(await sealRequest({ a: "move", t: existing, to: target, ts })) : "";
+  if (mine !== seq) return;  // a newer keystroke is being prepared
+  $("newWarn").hidden = !moveProblem; $("newWarn").textContent = moveProblem;
+  setLink($("go"), join); setLink($("upd"), upd); setLink($("stop"), stop); setLink($("move"), move);
+}
+function cleanTopic(v) { return v.trim().replace(/^https?:\/\/ntfy\.sh\//, ""); }  // names are case-sensitive
+let timer = null;
+["name", "hold", "mine", "newTopic"].forEach(id => $(id).addEventListener("input", () => {
+  clearTimeout(timer); timer = setTimeout(prepare, 250);
+}));
+document.querySelectorAll("a.btn").forEach(a => a.addEventListener("click", e => {
+  if (a.getAttribute("aria-disabled") === "true") e.preventDefault();
+}));
+$("go").addEventListener("click", () => {
+  if ($("go").getAttribute("aria-disabled") === "true") return;
+  $("oneTap").href = oneTapLink();
+  store.set("topic", myTopic); store.set("name", $("name").value.trim()); store.set("hold", $("hold").value);
+  $("mine").value = myTopic;
+  $("next").hidden = false;
+  setTimeout(() => $("next").scrollIntoView({ behavior: "smooth" }), 300);
+});
+["upd", "stop"].forEach(id => $(id).addEventListener("click", () => {
+  if ($(id).getAttribute("aria-disabled") === "true") return;
+  store.set("hold", $("hold").value);
+}));
+$("move").addEventListener("click", () => {
+  if ($("move").getAttribute("aria-disabled") === "true") return;
+  const target = $("newTopic").value.trim();
+  store.set("topic", target);   // this phone now knows the new name
+  setTimeout(() => { $("mine").value = target; $("newTopic").value = ""; prepare(); }, 400);
+});
+$("copy").addEventListener("click", async () => {
+  const ok = await copyText(myTopic);
+  $("copy").textContent = ok ? "已複製，去 ntfy 貼上" : "無法複製，請截圖";
+  setTimeout(() => { $("copy").textContent = "複製頻道名稱"; }, 2200);
+});
+if (!(window.crypto && crypto.subtle)) {
+  $("goHint").textContent = "這個瀏覽器不支援加密，請用 Safari 或 Chrome 打開這個網頁。";
+}
+prepare();
+</script>
+</body>
+</html>
